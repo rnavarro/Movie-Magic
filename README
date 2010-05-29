@@ -5,9 +5,12 @@ Description
 ===========
 This little script makes some super crazy movie magic!
 
-The script looks for a .nfo file or an imdb.txt file containing the movie imdb url, from this it queries imdb for the title and release year of the movie
+The script looks for a .nfo file or an imdb.txt file containing the movie imdb url,
+from this it queries imdb for the title and release year of the movie
 
-If the movie is an "asian" film (based on the country criteria in config.php) it moves those movies into a different directory and translates the titles to their US english equivalents.
+If the movie is an "asian" film (based on the country criteria in config.php) it
+moves those movies into a different directory and translates the titles to their
+US english equivalents.
  
 Requirements
 ============
