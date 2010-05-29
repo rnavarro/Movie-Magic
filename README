@@ -1,0 +1,30 @@
+Movie Magic v1.2 Beta
+***************************************
+
+Description
+===========
+This little script makes some super crazy movie magic!
+It queries imdb for the title and release year of the movie
+If the movie is an "asian" film (based on my country criteria below) it moves those movies into a different directory and translates the titles to their US english equivalents.
+ 
+Requirements
+============
+	* TMDB Account with API Key (http://www.themoviedb.org/account/signup)
+	* IMDB2 Class [Already Included] (http://sourceforge.net/projects/imdbphp/)
+	* OS/Server Independent
+ 
+Install
+=======
+	1. Change the settings in config.php
+	2. Just run runner.php (php -q ./runner.php)
+ 
+Contact
+=======
+Robert Navarro
+
+Support
+=======
+http://codaset.com/phiivo/movie-magic/tickets
+
+* New Tickets
+	http://codaset.com/phiivo/movie-magic/tickets/new
