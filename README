@@ -4,8 +4,10 @@ Movie Magic v1.2 Beta
 Description
 ===========
 This little script makes some super crazy movie magic!
-It queries imdb for the title and release year of the movie
-If the movie is an "asian" film (based on my country criteria below) it moves those movies into a different directory and translates the titles to their US english equivalents.
+
+The script looks for a .nfo file or an imdb.txt file containing the movie imdb url, from this it queries imdb for the title and release year of the movie
+
+If the movie is an "asian" film (based on the country criteria in config.php) it moves those movies into a different directory and translates the titles to their US english equivalents.
  
 Requirements
 ============
@@ -18,6 +20,13 @@ Install
 	1. Yank the source ($ git clone git://codaset.com/phiivo/movie-magic.git)
 	2. Change the settings in config.php
 	3. Just run runner.php (php -q ./runner.php)
+
+Features
+========
+	* Pulls Posters and Backdrops from TMDB so they appear in XBMC
+	* Renames folders based on movie information as per imdb
+	* Can seperate asian movies from regular collection
+	* Filters foldernames so they are "Windows Friendly"
  
 Contact
 =======
