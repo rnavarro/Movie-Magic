@@ -21,6 +21,7 @@ Requirements
 Install
 =======
 	1. Yank the source ($ git clone git://codaset.com/phiivo/movie-magic.git)
+	2. Copy config.php.default to config.php
 	2. Change the settings in config.php
 	3. Just run runner.php (php -q ./runner.php)
 
