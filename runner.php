@@ -24,6 +24,19 @@
 require ("imdbphp2/imdb.class.php");
 require ("config.php");
 
+$debug = false;
+$simulate = false;
+
+if(array_search("debug", $argv)) {
+	echo "*** Debuging Enabled ***\n\n";
+	$debug = true;
+}
+
+if(array_search("sim", $argv)) {
+	echo "*** Simulation Mode ***\n\n";
+	$simulate = true;
+}
+
 $tree = scan_directory_recursively($source_dir);
 
 foreach($tree as $folder) {
@@ -99,7 +112,7 @@ foreach($tree as $folder) {
 			} else {
 				// Movie Not found in TMDB
 				if($xml->movies == 'Nothing found.') {
-					echo " || No Poster!\n";
+					echo " || Not in TMBD!\n";
 					continue;
 				}
 				$posters = array();
@@ -113,19 +126,44 @@ foreach($tree as $folder) {
 					}
 				}
 			}
+			
+			if(empty($posters)) {
+				if(empty($backdrops)) {
+					echo " || No Poster URL!\n";
+				} else {
+					echo " || No Poster URL! (But there is a backdrop!)\n";
+				}
+				continue;
+			}
+			
+			if(empty($backdrops)) {
+				echo " || No Backdrop URL! (But there is a poster!)\n";
+				continue;
+			}
+			
 			$poster_url = array_pop(array_reverse($posters));
-			if(empty($poster_url)) {
-                                echo " || No Poster URL!\n";
-                                continue;
-                        }
 			$poster_url = get_object_vars($poster_url);
 			$poster_url = $poster_url['@attributes']['url'];
+			
+			$return = get_headers($poster_url, 1);
+			if(stristr($return[0], '404')) {
+				echo "|| Looks like the Poster URL is bad? (404) [$poster_url]\n";
+				continue;
+			}
+			
 			$poster_url = escapeshellarg($poster_url);
 			//echo "\n$poster_url\n";
-			
-			$backdrop_url = array_pop(array_reverse($backdrops));
+            
+            $backdrop_url = array_pop(array_reverse($backdrops));
 			$backdrop_url = get_object_vars($backdrop_url);
 			$backdrop_url = $backdrop_url['@attributes']['url'];
+			
+			$return = get_headers($backdrop_url, 1);
+			if(stristr($return[0], '404')) {
+				echo "|| Looks like the Backdrop URL is bad? (404) [$backdrop_url]\n";
+				continue;
+			}
+			
 			$backdrop_url = escapeshellarg($backdrop_url);
 			//echo "\n$backdrop_url\n";
 			
@@ -135,23 +173,37 @@ foreach($tree as $folder) {
 			$poster2 = $poster."tbn";
 			$poster1 = escapeshellarg($poster1);
 			$poster2 = escapeshellarg($poster2);
-			$cmd = 'wget '.$poster_url.' -O '.$poster1.' -o /dev/null';
+			$cmd = 'wget -q '.$poster_url.' -O '.$poster1;
 			echo " [Poster]";
-			//echo "\n$cmd\n";
-			exec($cmd);
-			$cmd = 'cp '.$poster1.' '.$poster2;
-			exec($cmd);
-			$cmd = 'cp '.$poster1.' '.escapeshellarg($folder['path'].'/folder.jpg');
-			exec($cmd);
-			
-			if(empty($backdrop_url)) {
-				echo " || No Backdrop URL!\n\n";
-				continue;
+			if($simulate) {
+				echo "\n$cmd\n";
 			} else {
-				// Save the backdrop
-				$cmd = 'wget '.$backdrop_url.' -O '.escapeshellarg($folder['path'].'/backdrop.jpg').' -o /dev/null';
-				echo " [Backdrop]";
+				exec($cmd, $return);
+			}
+
+			// Copy poster .jpg to poster .tbn
+			$cmd = 'cp '.$poster1.' '.$poster2;
+			if($simulate) {
+				echo "\n$cmd\n";
+			} else {
 				exec($cmd);
+			}
+			
+			// Copy poster .jpg to poster folder.jpg
+			$cmd = 'cp '.$poster1.' '.escapeshellarg($folder['path'].'/folder.jpg');
+			if($simulate) {
+				echo "\n$cmd\n";
+			} else {
+				exec($cmd);
+			}
+			
+			// Save the backdrop
+			$cmd = 'wget -q '.$backdrop_url.' -O '.escapeshellarg($folder['path'].'/backdrop.jpg');
+			echo " [Backdrop]";
+			if($simulate) {
+				echo "\n$cmd\n";
+			} else {
+				exec($cmd, $return);
 			}
 		}
 
@@ -274,8 +326,12 @@ foreach($tree as $folder) {
 			continue;
 		}
 		$cmd = 'mv '.escapeshellarg($folder['path']).' '.escapeshellarg($new_dest);
-		//echo "\n".$cmd."\n";
-		exec($cmd);
+		
+		if($simulate) {
+			echo "\n".$cmd."\n";
+		} else {
+			exec($cmd);
+		}
 		
 	} else {
 		echo " || No NFO file!";
