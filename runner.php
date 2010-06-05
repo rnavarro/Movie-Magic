@@ -21,8 +21,8 @@
  * http://sourceforge.net/projects/imdbphp/
  */
 
-require ("imdbphp2/imdb.class.php");
-require ("config.php");
+require (dirname(__FILE__)."/imdbphp2/imdb.class.php");
+require (dirname(__FILE__)."/config.php");
 
 $debug = false;
 $simulate = false;
