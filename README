@@ -17,6 +17,11 @@ Requirements
 	* TMDB Account with API Key (http://www.themoviedb.org/account/signup)
 	* IMDB2 Class [Already Included] (http://sourceforge.net/projects/imdbphp/)
 	* OS/Server Independent
+
+Recommended
+===========
+	* Intall mediainfo to gain support for file level HD content detection
+		* Ubuntu: $sudo apt-get install mediainfo
  
 Install
 =======
@@ -31,6 +36,7 @@ Features
 	* Renames folders based on movie information as per imdb
 	* Can seperate asian movies from regular collection
 	* Filters foldernames so they are "Windows Friendly"
+	* Reads metadata from video files using mediainfo to detect HD content
  
 Contact
 =======
