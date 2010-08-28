@@ -208,22 +208,67 @@ foreach($tree as $folder) {
 		}
 
 		// Figure out the movie screen size
-		$screen_size = "";
-
-		if(is_array($movie_files)) {
-			foreach($movie_files as $mfile) {
-				if(strstr($mfile, '720p')) {
-					$screen_size = " HD 720p";
-				} elseif (strstr($mfile, '1080p')) {
-					$screen_size = " HD 1080p";
+				
+		// Check to see if we have mediainfo installed
+		// Currently this is only for linux, let me know if you want windows support...
+		exec('mediainfo --version', $output, $return);
+		
+		// mediainfo exists
+		if($return == 255) {
+			if(is_array($movie_files)) {
+				foreach($movie_files as $mfile) {
+					$mpath = escapeshellarg($folder['path'].'/'.$mfile);
+					
+					$width = Array();
+					$height = Array();
+					$scan_type = Array();
+					$screen_size = "";
+					
+					exec('mediainfo --Inform=Video\;%Width% '.$mpath, $width);
+					exec('mediainfo --Inform=Video\;%Height% '.$mpath, $height);
+					exec('mediainfo --Inform=Video\;%ScanType% '.$mpath, $scan_type);
+					
+					if($width[0] >= 1280) {
+						$screen_size = '720';
+					}
+					if($width[0] >= 1920) {
+						$screen_size = '1080';
+					}
+					
+					// If the film isn't HD reset the screensize to nothing
+					if($screen_size != '') {
+						if($scan_type[0] == 'Progressive') {
+							$screen_size .= 'p';
+						} else {
+							$screen_size .= 'i';
+						}
+						
+						$screen_size = ' HD '.$screen_size;
+					} else {
+						$screen_size = "";
+					}
 				}
 			}
-		}
-
-		if(strstr($folder['name'], '720p')) {
-			$screen_size = " HD 720p";
-		} elseif(strstr($folder['name'], '1080p')) {
-			$screen_size = " HD 1080p";
+		// Looks like mediainfo isn't installed, try to grab the video size from the file/folder name
+		} else {
+			$screen_size = "";
+			
+			if(is_array($movie_files)) {
+				foreach($movie_files as $mfile) {
+					
+					if(strstr($mfile, '720p')) {
+						$screen_size = " HD 720p";
+					} elseif (strstr($mfile, '1080p')) {
+						$screen_size = " HD 1080p";
+					}
+				}
+			}
+	
+			if(strstr($folder['name'], '720p')) {
+				$screen_size = " HD 720p";
+			} elseif(strstr($folder['name'], '1080p')) {
+				$screen_size = " HD 1080p";
+			}
 		}
 		
 		// Query IMDB for the title and year
@@ -305,8 +350,10 @@ foreach($tree as $folder) {
 		if(stristr($title, '<div class="info-content">')) {
 			$title = substr($title,strlen('<div class="info-content">'));
 		}
+		// Stupid string replacements for windows
 		$title = str_replace(':',';',$title);
 		$title = str_replace('?','',$title);
+		$title = str_replace('*','_',$title);
 		$title = html_entity_decode($title, ENT_QUOTES, 'UTF-8');
 		$new_name = $title.' ('.$movie->year().')'.$screen_size;
 		
