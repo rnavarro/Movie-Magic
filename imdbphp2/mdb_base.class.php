@@ -8,7 +8,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: mdb_base.class.php 374 2010-04-26 05:41:16Z izzy $ */
+ /* $Id$ */
 
 require_once (dirname(__FILE__)."/browseremulator.class.php");
 if (defined('IMDBPHP_CONFIG')) require_once (IMDBPHP_CONFIG);
@@ -45,10 +45,10 @@ define('FULL_ACCESS',9);
  * @author Georgos Giagas
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2002-2004 by Giorgos Giagas and (c) 2004-2009 by Itzchak Rehberg and IzzySoft
- * @version $Revision: 374 $ $Date: 2010-04-26 07:41:16 +0200 (Mo, 26. Apr 2010) $
+ * @version $Revision$ $Date$
  */
 class mdb_base extends mdb_config {
-  var $version = '2.0.1';
+  var $version = '2.0.0';
 
   /** Last response from the IMDB server
    *  This is a 3-digit code according to RFC2616. This is e.g. a "200" for "OK",

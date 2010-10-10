@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: movie.php 368 2010-04-25 22:50:17Z izzy $ */
+ /* $Id$ */
 
 if (isset ($_GET["mid"])) {
   $movieid = $_GET["mid"];
@@ -294,6 +294,7 @@ if (isset ($_GET["mid"])) {
     echo "</ul></td></tr>\n";
   }
 
+  # Seasons
   $seasons = $movie->seasons();
   if ( $seasons != 0 ) {
     ++$rows;
@@ -307,6 +308,18 @@ if (isset ($_GET["mid"])) {
       }
     }
     echo "</td></tr>\n";
+  }
+
+  # Locations
+  $locs = $movie->locations();
+  if (!empty($locs)) {
+    ++$rows;
+    echo '<tr><td valign="top"><b>Filming Locations:</b></td><td><ul>';
+    foreach ($locs as $loc) {
+      if ( empty($loc['url']) ) echo '<li>'.$loc['name'].'</li>';
+      else echo '<li><a href="http://'.$movie->imdbsite.$loc['url'].'">'.$loc['name'].'</a></li>';
+    }
+    echo "</ul></td></tr>\n";
   }
 
   # Selected User Comment

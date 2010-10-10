@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: person.php 368 2010-04-25 22:50:17Z izzy $ */
+ /* $Id$ */
 
 if (isset ($_GET["mid"])) {
   $pid = $_GET["mid"];

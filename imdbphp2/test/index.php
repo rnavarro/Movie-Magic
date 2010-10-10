@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: index.php 275 2009-11-25 17:58:54Z izzy $ */
+ /* $Id$ */
 
 #===============================================[ optional URL Parameters ]===
 # check: only check the specified class (movie, name, charts, nowplay, trail)

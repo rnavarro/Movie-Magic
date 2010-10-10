@@ -1,7 +1,28 @@
-$Id: CHANGELOG 387 2010-05-23 12:31:44Z izzy $
+$Id$
 
 History for IMDBPHP2
 ====================
+
+v2.0.2
+-------------------
+! imdbsearch: some search results missed the year (if it was consisting of more than a plain
+  year, e.g. something like "2001/II")
+! imdb::prodNotes: lastUpdate was broken due to a site change
++ movies: added imdb::locations() to retrieve details on the filming locations.
+  pilot::locations() is just a wrapper to this requiring full fallback configured.
+! mpaa_reason returned wrong text (tnx to dblume for report and fix!)
++ added method is_serial() to the movie classes to determine whether the selected
+  entry is part of a TV series
+! again site changes at IMDB - fixed imdb::title_year(), imdb::thumbphoto(), and
+  imdb::country() with code sent by moonface (tnx!)
+! imdb::languages() (and thus imdb::language() as well) had been broken - fixed.
++ added config option to set up the user agent "manually"
+! if an actor had a too long movie list, no results where shown (there seems to be
+  a limitation in preg_match)
+! HUGE SITE CHANGES ON IMDB! Thanks to your contributions, we got many stuff fixed
+  in the imdb class: thumbphoto, ratevote, genres, cast, alsoknown, runtime_all,
+  comment, comment_split, tagline, plotoutline, keywords, mpaa_reason, prodNotes
+
 
 v2.0.1 (23.05.2010)
 -------------------

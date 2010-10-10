@@ -10,7 +10,7 @@
 # under the terms of the GNU General Public License (see doc/LICENSE)       #
 #############################################################################
 
-/* $Id: imdb_movielist.class.php 295 2009-11-30 22:35:38Z izzy $ */
+/* $Id$ */
 
 require_once (dirname(__FILE__)."/movie_base.class.php");
 
@@ -20,7 +20,7 @@ require_once (dirname(__FILE__)."/movie_base.class.php");
  * @extends movie_base
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2009 by Itzchak Rehberg and IzzySoft
- * @version $Revision: 295 $ $Date: 2009-11-30 23:35:38 +0100 (Mo, 30. Nov 2009) $
+ * @version $Revision$ $Date$
  */
 class imdb_movielist extends movie_base {
 
@@ -31,7 +31,7 @@ class imdb_movielist extends movie_base {
   */
  function __construct() {
    parent::__construct('0000001');
-   $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision: 295 $');
+   $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision$');
    $this->reset_vars();
  }
 

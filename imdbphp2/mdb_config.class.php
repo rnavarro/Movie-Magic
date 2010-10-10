@@ -9,14 +9,15 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: mdb_config.class.php 380 2010-05-05 23:42:24Z izzy $ */
+ /* $Id$ */
 
 // the proxy to use for connections to imdb (leave it empty for no proxy).
 // this is only supported with PEAR. 
 define ('PROXY', "");
 define ('PROXY_PORT', "");
 
-// set to false to use the old browseremulator.
+// set this to TRUE if you want to play with the PEAR stuff instead of
+// browseremulator. Be warned that there's no support for problems ;)
 $PEAR = false;
 
 /** Enable IMDB-Fallback for the Pilot classes?
@@ -34,7 +35,7 @@ if ( !defined('PILOT_IMDBFALLBACK') ) define('PILOT_IMDBFALLBACK',FALSE);
  * @class mdb_config
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2002-2004 by Giorgos Giagas and (c) 2004-2008 by Itzchak Rehberg and IzzySoft
- * @version $Revision: 380 $ $Date: 2010-05-06 01:42:24 +0200 (Do, 06. Mai 2010) $
+ * @version $Revision$ $Date$
  */
 class mdb_config {
   var $imdbsite;
@@ -163,6 +164,19 @@ class mdb_config {
      * @attribute string searchvariant
      */
     $this->searchvariant = "";
+    /** Set the default user agent (if none is detected)
+     * @attribute string user_agent
+     */
+    $this->default_agent = 'Mozilla/5.0 (X11; U; Linux i686; de; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3';
+    /** Enforce the use of a special user agent
+     * @attribute string force_agent
+     */
+    $this->force_agent = '';
+    /** Trigger the HTTP referer
+     *  This is required in some places. However, if you think you need to disable
+     *  this behaviour, do it here.
+     */
+    $this->trigger_referer = TRUE;
     // let PHP report any script errors (useful for code debugging). Comment out
     // to use the default level defined in php.ini, or set to an appropriate
     // level (E_ALL = all errors/warning/notices, E_ALL ^ E_NOTICE = PHP default;

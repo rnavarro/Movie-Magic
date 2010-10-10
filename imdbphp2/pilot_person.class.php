@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: pilot_person.class.php 372 2010-04-26 05:37:31Z izzy $ */
+ /* $Id$ */
 
  require_once (dirname(__FILE__)."/person_base.class.php");
  require_once (dirname(__FILE__)."/imdbsearch.class.php");
@@ -22,7 +22,7 @@
   * @extends mdb_base
   * @author Izzy (izzysoft AT qumran DOT org)
   * @copyright 2008 by Itzchak Rehberg and IzzySoft
-  * @version $Revision: 372 $ $Date: 2010-04-26 07:37:31 +0200 (Mo, 26. Apr 2010) $
+  * @version $Revision$ $Date$
   */
  class pilot_person extends person_base {
 
@@ -57,7 +57,7 @@
     parent::__construct($id);
     if ( empty($this->pilot_apikey) )
       trigger_error('Please provide a valid api key or contact api@moviepilot.de.',E_USER_WARNING);
-    $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision: 372 $');
+    $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision$');
     if (PILOT_IMDBFALLBACK) $this->imdb = new imdb_person($id);
     $this->setid($id);
   }

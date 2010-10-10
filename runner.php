@@ -270,6 +270,8 @@ foreach($tree as $folder) {
 				$screen_size = " HD 1080p";
 			}
 		}
+
+		echo ' {'.$screen_size.'} '; 
 		
 		// Query IMDB for the title and year
 		$movie = new imdb ($imdb_id);
@@ -289,7 +291,7 @@ foreach($tree as $folder) {
 		$title = '';
 		// It is foreign, Find an alternate title
 		if($foreign) {
-			echo ' [foreign] ';
+			echo ' ['.$movie->language().'] ';
 			$aka = $movie->alsoknow();
 			// Do we have a specific USA title?
 			foreach($aka as $name) {
