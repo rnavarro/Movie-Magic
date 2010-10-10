@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id$ */
+ /* $Id: pilotsearch.class.php 372 2010-04-26 05:37:31Z izzy $ */
 
  require_once (dirname(__FILE__)."/mdb_base.class.php");
 
@@ -20,7 +20,7 @@
   * @extends mdb_config
   * @author Izzy (izzysoft AT qumran DOT org)
   * @copyright (c) 2002-2004 by Giorgos Giagas and (c) 2004-2008 by Itzchak Rehberg and IzzySoft
-  * @version $Revision$ $Date$
+  * @version $Revision: 372 $ $Date: 2010-04-25 22:37:31 -0700 (Sun, 25 Apr 2010) $
   */
  class pilotsearch extends mdb_base {
   var $page = "";

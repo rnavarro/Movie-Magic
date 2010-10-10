@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id$ */
+ /* $Id: mdb_config.class.php 405 2010-10-03 18:24:34Z izzy $ */
 
 // the proxy to use for connections to imdb (leave it empty for no proxy).
 // this is only supported with PEAR. 
@@ -35,7 +35,7 @@ if ( !defined('PILOT_IMDBFALLBACK') ) define('PILOT_IMDBFALLBACK',FALSE);
  * @class mdb_config
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2002-2004 by Giorgos Giagas and (c) 2004-2008 by Itzchak Rehberg and IzzySoft
- * @version $Revision$ $Date$
+ * @version $Revision: 405 $ $Date: 2010-10-03 11:24:34 -0700 (Sun, 03 Oct 2010) $
  */
 class mdb_config {
   var $imdbsite;

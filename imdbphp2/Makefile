@@ -1,5 +1,5 @@
 # Makefile for imdbphp
-# $Id$
+# $Id: Makefile 365 2010-04-25 13:53:27Z izzy $
 
 DESTDIR=
 prefix=/usr/local

@@ -11,7 +11,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id$ */
+ /* $Id: imdb_trailers.inc 231 2009-09-29 18:58:14Z izzy $ */
 
 require_once("imdb.class.php");
 require_once("imdb_trailers.class.php");

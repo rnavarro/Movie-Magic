@@ -11,7 +11,7 @@
  # Class provided by Pablo Castorino <pablo AT castorinop DOT com DOT ar>    #
  # For details, see http://projects.izzysoft.de/trac/imdbphp/wiki/imdbXML    #
  #############################################################################
- /* $Id$ */
+ /* $Id: imdbXML.php 301 2010-01-18 23:53:53Z izzy $ */
 
 // include class file
 require_once("XML/Serializer.php");

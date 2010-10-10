@@ -11,7 +11,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id$ */
+ /* $Id: helpers.inc 364 2010-04-22 18:10:35Z izzy $ */
 
 #======================================================[ Global Variables ]===
 $methods  = 0;

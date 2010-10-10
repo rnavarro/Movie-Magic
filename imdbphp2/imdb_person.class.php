@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id$ */
+ /* $Id: imdb_person.class.php 402 2010-10-03 17:59:34Z izzy $ */
 
  require_once (dirname(__FILE__)."/person_base.class.php");
  require_once (dirname(__FILE__)."/imdbsearch.class.php");
@@ -21,7 +21,7 @@
   * @extends mdb_base
   * @author Izzy (izzysoft AT qumran DOT org)
   * @copyright 2008 by Itzchak Rehberg and IzzySoft
-  * @version $Revision$ $Date$
+  * @version $Revision: 402 $ $Date: 2010-10-03 10:59:34 -0700 (Sun, 03 Oct 2010) $
   */
  class imdb_person extends person_base {
 
@@ -52,7 +52,7 @@
    */
   function __construct($id) {
     parent::__construct($id);
-    $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision$');
+    $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision: 402 $');
     $this->setid($id);
   }
 
@@ -753,7 +753,7 @@
   * @extends imdbsearch
   * @author Izzy (izzysoft AT qumran DOT org)
   * @copyright 2008-2009 by Itzchak Rehberg and IzzySoft
-  * @version $Revision$ $Date$
+  * @version $Revision: 402 $ $Date: 2010-10-03 10:59:34 -0700 (Sun, 03 Oct 2010) $
   */
  class imdbpsearch extends imdbsearch {
  #-----------------------------------------------------------[ Constructor ]---

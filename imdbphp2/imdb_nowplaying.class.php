@@ -12,7 +12,7 @@
  # This program is free software; you can redistribute and/or modify it      #
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
- # $Id$
+ # $Id: imdb_nowplaying.class.php 241 2009-10-07 17:18:53Z izzy $
 
  require_once (dirname(__FILE__)."/mdb_base.class.php");
 
@@ -21,7 +21,7 @@
   * @package IMDB
   * @class imdb_nowplaying
   * @author Ricardo Silva (banzap) <banzap@gmail.com>
-  * @version $Revision$ $Date$
+  * @version $Revision: 241 $ $Date: 2009-10-07 10:18:53 -0700 (Wed, 07 Oct 2009) $
   */
  class imdb_nowplaying {
  	var $nowplayingpage = "http://www.imdb.com/nowplaying/";
@@ -34,7 +34,7 @@
 	   $req = new MDB_Request($this->nowplayingpage);
 	   $req->sendRequest();
 	   $this->page=$req->getResponseBody();
-	   $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision$');
+	   $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision: 241 $');
 	}
 
 	/** Retrieve the Now Playing Movies

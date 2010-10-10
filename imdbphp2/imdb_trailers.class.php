@@ -13,7 +13,7 @@
  # This program is free software; you can redistribute and/or modify it      #
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
- # $Id$
+ # $Id: imdb_trailers.class.php 357 2010-03-16 22:01:11Z izzy $
 
  require_once (dirname(__FILE__)."/imdb.class.php");
 
@@ -22,7 +22,7 @@
   * @package IMDB
   * @class imdb_trailers
   * @author Ricardo Silva (banzap) <banzap@gmail.com>
-  * @version $Revision$ $Date$
+  * @version $Revision: 357 $ $Date: 2010-03-16 15:01:11 -0700 (Tue, 16 Mar 2010) $
   */
  class imdb_trailers {
 	var $page = "";
@@ -38,7 +38,7 @@
 	 * @constructor imdb_trailers
 	 */
     function imdb_trailers(){
-      $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision$');
+      $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision: 357 $');
     }
 		
    /** Retrieve trailer URLs from moviemaze.de

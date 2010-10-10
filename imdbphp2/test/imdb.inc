@@ -11,7 +11,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id$ */
+ /* $Id: imdb.inc 362 2010-04-22 17:56:13Z izzy $ */
 
 require_once("imdb.class.php");
 require_once(dirname(__FILE__)."/helpers.inc");

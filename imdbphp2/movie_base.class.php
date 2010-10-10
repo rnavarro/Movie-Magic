@@ -8,7 +8,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id$ */
+ /* $Id: movie_base.class.php 391 2010-06-03 13:06:29Z izzy $ */
 
  require_once (dirname(__FILE__)."/browseremulator.class.php");
  require_once (dirname(__FILE__)."/mdb_base.class.php");
@@ -21,7 +21,7 @@
  * @extends mdb_base
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2009 by Itzchak Rehberg and IzzySoft
- * @version $Revision$ $Date$
+ * @version $Revision: 391 $ $Date: 2010-06-03 06:06:29 -0700 (Thu, 03 Jun 2010) $
  */
 class movie_base extends mdb_base {
 

@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id$ */
+ /* $Id: imdbsearch.class.php 388 2010-06-03 11:28:49Z izzy $ */
 
  require_once (dirname(__FILE__)."/browseremulator.class.php");
  if (defined('IMDBPHP_CONFIG')) require_once (IMDBPHP_CONFIG);
@@ -24,7 +24,7 @@
   * @extends mdb_config
   * @author Izzy (izzysoft AT qumran DOT org)
   * @copyright (c) 2002-2004 by Giorgos Giagas and (c) 2004-2008 by Itzchak Rehberg and IzzySoft
-  * @version $Revision$ $Date$
+  * @version $Revision: 388 $ $Date: 2010-06-03 04:28:49 -0700 (Thu, 03 Jun 2010) $
   */
  class imdbsearch extends mdb_base {
   var $page = "";

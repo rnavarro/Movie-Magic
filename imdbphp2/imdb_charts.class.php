@@ -12,7 +12,7 @@
  # This program is free software; you can redistribute and/or modify it      #
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
- /* $Id$ */
+ /* $Id: imdb_charts.class.php 269 2009-11-24 21:20:24Z izzy $ */
 
  include_once (dirname(__FILE__)."/mdb_base.class.php");
 
@@ -21,7 +21,7 @@
   * @package IMDB
   * @class imdb_topcharts
   * @author Ricardo Silva (banzap) <banzap@gmail.com>
-  * @version $Revision$ $Date$
+  * @version $Revision: 269 $ $Date: 2009-11-24 13:20:24 -0800 (Tue, 24 Nov 2009) $
   */
 
  class imdb_topcharts {
@@ -34,7 +34,7 @@
 	   $req = new MDB_Request($this->chartspage);
 	   $req->sendRequest();
 	   $this->page=$req->getResponseBody();
-	   $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision$');
+	   $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision: 269 $');
 	}
  	
 	/** Get the MOVIEmeter Top 10

@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id$ */
+ /* $Id: movie.php 391 2010-06-03 13:06:29Z izzy $ */
 
 if (isset ($_GET["mid"])) {
   $movieid = $_GET["mid"];

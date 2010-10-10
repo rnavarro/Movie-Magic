@@ -10,7 +10,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id$ */
+ /* $Id: movieposterdb.class.php 399 2010-09-29 20:10:05Z izzy $ */
 
  require_once (dirname(__FILE__)."/mdb_base.class.php");
 
@@ -21,7 +21,7 @@
  * @extends mdb_base
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2009 by Itzchak Rehberg and IzzySoft
- * @version $Revision$ $Date$
+ * @version $Revision: 399 $ $Date: 2010-09-29 13:10:05 -0700 (Wed, 29 Sep 2010) $
  */
 class movieposterdb extends mdb_base {
 

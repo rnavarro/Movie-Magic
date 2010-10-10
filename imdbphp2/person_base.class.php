@@ -8,7 +8,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id$ */
+ /* $Id: person_base.class.php 325 2010-02-21 21:21:24Z izzy $ */
 
  require_once (dirname(__FILE__)."/browseremulator.class.php");
  require_once (dirname(__FILE__)."/mdb_base.class.php");
@@ -20,7 +20,7 @@
  * @extends mdb_base
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2009 by Itzchak Rehberg and IzzySoft
- * @version $Revision$ $Date$
+ * @version $Revision: 325 $ $Date: 2010-02-21 13:21:24 -0800 (Sun, 21 Feb 2010) $
  */
 class person_base extends mdb_base {
 
