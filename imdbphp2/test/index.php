@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: index.php 275 2009-11-25 17:58:54Z izzy $ */
+ /* $Id: index.php 479 2011-10-12 08:58:51Z izzy $ */
 
 #===============================================[ optional URL Parameters ]===
 # check: only check the specified class (movie, name, charts, nowplay, trail)
@@ -39,16 +39,32 @@ $check_movie   = false;
 $check_name    = false;
 $check_charts  = false;
 $check_nowplay = false;
+$check_budget  = false;
+$uri = $_SERVER['REQUEST_URI'];
+if ( strpos($uri,'?')>0 ) $uri .= '&amp;';
+else $uri .= '?';
+raw("<SPAN STYLE='margin-right:2em;'><A HREF='{$uri}api=imdb'>IMDB</A></SPAN><SPAN STYLE='margin-left:2em;'><A HREF='{$uri}api=pilot'>PILOT</A></SPAN>\n");
+if ( empty($_REQUEST['api']) && !in_array($_REQUEST['api'],array('imdb','pilot')) ) {
+  if (CRON) $api = 'imdb';
+  else {
+    raw("</BODY></HTML>\n");
+    exit;
+  }
+} else {
+  $api = $_REQUEST['api'];
+}
 switch ($_REQUEST["check"]) {
   case "movie"   : $check_movie   = true; break;
   case "name"    : $check_name    = true; break;
   case "charts"  : $check_charts  = true; break;
   case "nowplay" : $check_nowplay = true; break;
+  case "budget"  : $check_budget  = true; break;
   default:
     $check_movie   = true;
     $check_name    = true;
     $check_charts  = true;
     $check_nowplay = true;
+    $check_budget  = true;
 }
 if (!empty($_REQUEST["skip"])) {
   $skips = explode(",",$_REQUEST["skip"]);
@@ -57,10 +73,11 @@ if (!empty($_REQUEST["skip"])) {
 }
 
 #=========================================================[ Run the tests ]===
-if ($check_movie)   require ("imdb.inc");
-if ($check_name)    require ("imdb_person.inc");
-if ($check_charts)  require ("imdb_charts.inc");
-if ($check_nowplay) require ("imdb_nowplaying.inc");
+if ($check_movie)   { if ($api=='imdb') require('imdb.inc'); else require('pilot.inc'); }
+if ($check_name)    { if ($api=='imdb') require('imdb_person.inc'); else require ('pilot_person.inc'); }
+if ($check_charts)  { if ($api=='imdb') require ("imdb_charts.inc"); }
+if ($check_nowplay) { if ($api=='imdb') require ("imdb_nowplaying.inc"); }
+if ($check_budget)  { if ($api=='imdb') require ("imdb_budget.inc"); }
 
 #===============================================[ Summary and HTML footer ]===
 $passed  = $methods - $failures;

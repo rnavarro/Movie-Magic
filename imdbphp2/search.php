@@ -10,7 +10,7 @@
  # ------------------------------------------------------------------------- #
  # Search for $name and display results                                      #
  #############################################################################
- # $Id: search.php 368 2010-04-25 22:50:17Z izzy $
+ # $Id: search.php 436 2010-12-30 18:11:28Z izzy $
 
 # Security check
 $engine = $_GET["engine"];
@@ -74,7 +74,7 @@ foreach ($results as $res) {
         $hint = " (".$details["role"]." in <a href='imdb.php?mid=".$details["mid"]."'>".$details["moviename"]."</a> (".$details["year"]."))";
       }
       echo " <TR><TD><a href='person.php?mid=".$res->imdbid()."'>".$res->name()."</a>$hint</TD>"
-         . "<TD><a href='http://".$search->imdbsite."/title/nm".$res->imdbid()."'>imdb page</a></TD></TR>\n";
+         . "<TD><a href='http://".$search->imdbsite."/name/nm".$res->imdbid()."'>imdb page</a></TD></TR>\n";
       break;
     default   :
       echo " <TR><TD><a href='movie.php?mid=".$res->imdbid()."&engine=".$_GET["engine"]."'>".$res->title()." (".$res->year().")</a></TD>"

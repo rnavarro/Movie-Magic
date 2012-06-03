@@ -24,7 +24,7 @@
   * @extends mdb_config
   * @author Izzy (izzysoft AT qumran DOT org)
   * @copyright (c) 2002-2004 by Giorgos Giagas and (c) 2004-2008 by Itzchak Rehberg and IzzySoft
-  * @version $Revision: 388 $ $Date: 2010-06-03 04:28:49 -0700 (Thu, 03 Jun 2010) $
+  * @version $Revision: 388 $ $Date: 2010-06-03 13:28:49 +0200 (Do, 03. Jun 2010) $
   */
  class imdbsearch extends mdb_base {
   var $page = "";

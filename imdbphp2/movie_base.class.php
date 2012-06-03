@@ -8,7 +8,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: movie_base.class.php 391 2010-06-03 13:06:29Z izzy $ */
+ /* $Id: movie_base.class.php 497 2012-01-18 07:05:19Z izzy $ */
 
  require_once (dirname(__FILE__)."/browseremulator.class.php");
  require_once (dirname(__FILE__)."/mdb_base.class.php");
@@ -21,7 +21,7 @@
  * @extends mdb_base
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2009 by Itzchak Rehberg and IzzySoft
- * @version $Revision: 391 $ $Date: 2010-06-03 06:06:29 -0700 (Thu, 03 Jun 2010) $
+ * @version $Revision: 497 $ $Date: 2012-01-18 08:05:19 +0100 (Mi, 18. Jan 2012) $
  */
 class movie_base extends mdb_base {
 
@@ -40,6 +40,7 @@ class movie_base extends mdb_base {
    */
   protected function reset_vars() {
    $this->page["Title"] = "";
+   $this->page["TitleFoot"] = ""; // IMDB only, as part of info was outsourced
    $this->page["Credits"] = "";
    $this->page["CrazyCredits"] = "";
    $this->page["Amazon"] = "";
@@ -79,6 +80,8 @@ class movie_base extends mdb_base {
    $this->extreviews = array();
    $this->goofs = array();
    $this->langs = array();
+   $this->langs_full = array();
+   $this->aspectratio = "";
    $this->main_comment = "";
    $this->main_genre = "";
    $this->main_keywords = array();
@@ -90,11 +93,15 @@ class movie_base extends mdb_base {
    $this->main_plotoutline = "";
    $this->main_rating = -1;
    $this->main_runtime = "";
+   $this->main_movietype = "";
    $this->main_title = "";
    $this->main_votes = -1;
    $this->main_year = -1;
+   $this->main_endyear = -1;
+   $this->main_yearspan = array();
    $this->main_creator = array();
    $this->main_tagline = "";
+   $this->main_storyline = "";
    $this->main_prodnotes = array();
    $this->main_movietypes = array();
    $this->main_top250 = -1;

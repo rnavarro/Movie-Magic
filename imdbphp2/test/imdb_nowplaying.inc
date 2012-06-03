@@ -11,7 +11,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: imdb_nowplaying.inc 364 2010-04-22 18:10:35Z izzy $ */
+ /* $Id: imdb_nowplaying.inc 480 2011-10-12 09:24:03Z izzy $ */
 
 require_once ("imdb_nowplaying.class.php");
 require_once(dirname(__FILE__)."/helpers.inc");
@@ -33,6 +33,12 @@ switch ($_REQUEST["cache"]) {
 $imdb = new imdb_nowplaying();
 
 headline("Class imdb_nowplaying (Revision ".$imdb->revision.")","imdb_nowplaying");
+
+page("Movies-In-Theaters");
+// setid($imdb,"0105946");
+ method($imdb,"getNowPlayingMovies");
+ method($imdb,"getTop10BoxOfficeMovies");
+endpage();
 
 echo "<UL>\n";
 

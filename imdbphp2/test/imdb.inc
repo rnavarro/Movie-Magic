@@ -11,7 +11,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: imdb.inc 362 2010-04-22 17:56:13Z izzy $ */
+ /* $Id: imdb.inc 501 2012-01-18 23:44:37Z izzy $ */
 
 require_once("imdb.class.php");
 require_once(dirname(__FILE__)."/helpers.inc");
@@ -35,6 +35,7 @@ switch ($_REQUEST["cache"]) {
 page("Title");
  setid($imdb,"0117500");
  method($imdb,"title");
+ method($imdb,"movietype");
  method($imdb,"year");
  method($imdb,"runtime");
  method($imdb,"rating");
@@ -47,6 +48,7 @@ page("Title");
  method($imdb,"tagline");
  method($imdb,"plotoutline");
  method($imdb,"photo");
+ method($imdb,"mainPictures");
  method($imdb,"country");
  method($imdb,"alsoknow");
  method($imdb,"sound");
@@ -57,6 +59,8 @@ page("Title");
  method($imdb,"keywords_all");
  setid($imdb,"0105946"); // Babylon 5
  method($imdb,"seasons");
+ setid($imdb,"0517673"); // Babylon 5: No Compromises
+ method($imdb,"get_episode_details");
  setid($imdb,"1632658"); // Running by Sight
  method($imdb,"prodNotes");
  setid($imdb,"0094592"); // 14 going 30 (TV)

@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: person.php 368 2010-04-25 22:50:17Z izzy $ */
+ /* $Id: person.php 478 2011-10-11 17:46:17Z izzy $ */
 
 if (isset ($_GET["mid"])) {
   $pid = $_GET["mid"];
@@ -36,6 +36,7 @@ if (isset ($_GET["mid"])) {
   echo "<HTML><HEAD>\n";
   echo " <TITLE>".$person->name()." [IMDBPHP2 v".$person->version." Demo]</TITLE>\n";
   echo " <STYLE TYPE='text/css'>body,td,th { font-size:12px; font-family:sans-serif; }</STYLE>\n";
+  echo " <META http-equiv='Content-Type' content='text/html; charset=$charset'>\n";
   echo "</HEAD>\n<BODY>\n<TABLE BORDER='1' ALIGN='center' STYLE='border-collapse:collapse'>";
 
   # Name
@@ -120,7 +121,7 @@ if (isset ($_GET["mid"])) {
   # MiniBio
   $bio = $person->bio();
   if (!empty($bio)) {
-    if ($_GET['engine']=='pilot') $idx = 0; else $idx = 1;
+    if ($_GET['engine']=='pilot' || count($bio)<2) $idx = 0; else $idx = 1;
     echo "<TR><TD><B>Mini Bio:</B></TD><TD>".preg_replace('/http\:\/\/'.str_replace(".","\.",$person->imdbsite).'\/name\/nm(\d{7})\//','?mid=\\1&engine='.$_GET['engine'],$bio[$idx]["desc"])."</TD></TR>\n";
   }
 
@@ -152,7 +153,7 @@ if (isset ($_GET["mid"])) {
     $tc = count($sal);
     for ($i=0;$i<$tc;++$i) {
       echo "<tr><td>";
-      if (!empty($sal[$i]["movie"]["imdb"])) echo "<a href='imdb.php?mid=".$sal[$i]["movie"]["imdb"]."&engine=".$_GET['engine']."'>".$sal[$i]["movie"]["name"]."</a>";
+      if (!empty($sal[$i]["movie"]["imdb"])) echo "<a href='movie.php?mid=".$sal[$i]["movie"]["imdb"]."&engine=".$_GET['engine']."'>".$sal[$i]["movie"]["name"]."</a>";
       else echo $sal[$i]["movie"]["name"];
       if (!empty($sal[$i]["movie"]["year"])) echo " (".$sal[$i]["movie"]["year"].")";
       echo "</td><td>".$sal[$i]["salary"]."</td></tr>";
@@ -170,7 +171,7 @@ if (isset ($_GET["mid"])) {
       echo "<TR><TD><b>$flname:</b> </td><td>\n";
       echo "<table align='left' border='1' style='border-collapse:collapse;background-color:#ddd;'><tr><th style='background-color:#07f;'>Movie</th><th style='background-color:#07f;'>Character</th></tr>";
       foreach ($filmo as $film) {
-        echo "<tr><td><a href='imdb.php?mid=".$film["mid"]."&engine=".$_GET['engine']."'>".$film["name"]."</a>";
+        echo "<tr><td><a href='movie.php?mid=".$film["mid"]."&engine=".$_GET['engine']."'>".$film["name"]."</a>";
         if (!empty($film["year"])) echo " (".$film["year"].")";
         echo "</td><td>";
         if (empty($film["chname"])) echo "&nbsp;";
@@ -206,7 +207,7 @@ if (isset ($_GET["mid"])) {
     echo "<table align='left' border='1' style='border-collapse:collapse;background-color:#ddd;'><tr><th style='background-color:#07f;'>Movie</th><th style='background-color:#07f;'>Year</th></tr>";
     $tc = count($pm);
     for ($i=0;$i<$tc;++$i) {
-      echo "<tr><td><a href='imdb.php?mid=".$pm[$i]["imdb"]."&engine=".$_GET['engine']."'>".$pm[$i]["name"]."</a></td><td>";
+      echo "<tr><td><a href='movie.php?mid=".$pm[$i]["imdb"]."&engine=".$_GET['engine']."'>".$pm[$i]["name"]."</a></td><td>";
       if (empty($pm[$i]["year"])) echo "&nbsp;</td></tr>";
       else echo $pm[$i]["year"]."</td></tr>";
     }
@@ -220,9 +221,19 @@ if (isset ($_GET["mid"])) {
     echo "<table align='left' border='1' style='border-collapse:collapse;background-color:#ddd;'><tr><th style='background-color:#07f;'>Interview</th><th style='background-color:#07f;'>Details</th><th style='background-color:#07f;'>Year</th><th style='background-color:#07f;'>Author</th></tr>";
     $tc = count($iv);
     for ($i=0;$i<$tc;++$i) {
-      echo "<tr><td><a href='http://".$person->imdbsite.$iv[$i]["inturl"]."'>".$iv[$i]["name"]."</a></td><td>".$iv[$i]["details"]."</td><td>".$iv[$i]["date"]["full"]."</td><td>";
+      echo "<tr><td>";
+      if ( empty($iv[$i]['inturl']) ) {
+        echo $iv[$i]["name"];
+      } else {
+        echo "<a href='http://".$person->imdbsite.$iv[$i]["inturl"]."'>".$iv[$i]["name"]."</a>";
+      }
+      echo "</td><td>".$iv[$i]["details"]."</td><td>".$iv[$i]["date"]["full"]."</td><td>";
       if (empty($iv[$i]["author"])) echo "&nbsp;</td></tr>";
-      else echo "<a href='http://".$person->imdbsite.$iv[$i]["auturl"]."'>".$iv[$i]["author"]."</a></td></tr>";
+      else {
+        if ( empty($iv[$i]['auturl']) ) echo $iv[$i]["author"];
+        else echo "<a href='http://".$person->imdbsite.$iv[$i]["auturl"]."'>".$iv[$i]["author"]."</a>";
+      echo "</td></tr>";
+      }
     }
     echo "</table></TD></TR>\n";
   }

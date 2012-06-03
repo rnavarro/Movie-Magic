@@ -8,7 +8,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: mdb_base.class.php 374 2010-04-26 05:41:16Z izzy $ */
+ /* $Id: mdb_base.class.php 503 2012-03-12 15:18:51Z izzy $ */
 
 require_once (dirname(__FILE__)."/browseremulator.class.php");
 if (defined('IMDBPHP_CONFIG')) require_once (IMDBPHP_CONFIG);
@@ -45,10 +45,10 @@ define('FULL_ACCESS',9);
  * @author Georgos Giagas
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2002-2004 by Giorgos Giagas and (c) 2004-2009 by Itzchak Rehberg and IzzySoft
- * @version $Revision: 374 $ $Date: 2010-04-25 22:41:16 -0700 (Sun, 25 Apr 2010) $
+ * @version $Revision: 503 $ $Date: 2012-03-12 16:18:51 +0100 (Mo, 12. Mär 2012) $
  */
 class mdb_base extends mdb_config {
-  var $version = '2.0.0';
+  var $version = '2.1.3';
 
   /** Last response from the IMDB server
    *  This is a 3-digit code according to RFC2616. This is e.g. a "200" for "OK",
@@ -101,14 +101,14 @@ class mdb_base extends mdb_config {
  #---------------------------------------------------------[ Other Helpers ]---
   protected $months = array("January"=>"01","February"=>"02","March"=>"03","April"=>"04",
            "May"=>"05","June"=>"06","July"=>"07","August"=>"08","September"=>"09",
-	   "October"=>"10","November"=>"11","December"=>"12");
+           "October"=>"10","November"=>"11","December"=>"12");
   /** Get numerical value for month name
    * @method monthNo
    * @param string name name of month
    * @return integer month number
    */
   function monthNo($mon) {
-    return $this->months[$mon];
+    return @$this->months[$mon];
   }
 
  #-------------------------------------------------------------[ Open Page ]---
@@ -141,9 +141,22 @@ class mdb_base extends mdb_config {
       case "HTTP/1.1 404":
         $this->page[$wt] = "cannot open page";
         $this->debug_scalar("cannot open page (error 404): $url");
+        $this->debug_object($response);
         return false; break;
-      case "HTTP/1.1 301":
-      case "HTTP/1.1 302":
+      case "HTTP/1.1 301": // permanent redirect
+      case "HTTP/1.1 302": // found
+      case "HTTP/1.1 303": // see other
+      case "HTTP/1.1 307": // temporary redirect
+        // in all these cases, the correct URL is to be found in the 'Location:' header
+        foreach ($head as $headline) {
+          if (strpos(trim(strtolower($headline)),'location')!==0) continue;
+          $aline = explode(': ',$headline);
+          $target = trim($aline[1]);
+          $this->getWebPage($wt,$target);
+          return;
+        }
+        // echo "<pre>";print_r($head);echo "</pre>\n";
+        // $this->debug_object($response);
       case "HTTP/1.1 200": break;
       default: $this->debug_scalar("HTTP response code not handled explicitly: '".$head[0]."'"); break;
     }

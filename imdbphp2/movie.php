@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: movie.php 391 2010-06-03 13:06:29Z izzy $ */
+ /* $Id: movie.php 510 2012-04-15 18:08:14Z izzy $ */
 
 if (isset ($_GET["mid"])) {
   $movieid = $_GET["mid"];
@@ -76,6 +76,10 @@ if (isset ($_GET["mid"])) {
     flush();
   }
 
+  # Movie Type
+  ++$rows;
+  echo '<TR><TD><B>Type:</B></TD><TD>'.$movie->movietype()."</TD></TR>\n";
+
   # Keywords
   $keywords = $movie->keywords();
   if ( !empty($keywords) ) {
@@ -88,6 +92,13 @@ if (isset ($_GET["mid"])) {
     ++$rows;
     echo '<TR><TD><B>Seasons:</B></TD><TD>'.$movie->seasons()."</TD></TR>\n";
     flush();
+  }
+
+  # Episode Details
+  $ser = $movie->get_episode_details();
+  if (!empty($ser)) {
+    ++$rows;
+    echo '<TR><TD><B>Series Details:</B></TD><TD>'.$ser['seriestitle'].' Season '.$ser['season'].', Episode '.$ser['episode'].", Airdate ".$ser['airdate']."</TD></TR>\n";
   }
 
   # Year & runtime
@@ -111,7 +122,10 @@ if (isset ($_GET["mid"])) {
       echo "<tr><td>$key</td><td>$mpaa</td></tr>";
     }
     echo "</table></TD></TR>\n";
-    if (!empty($mpar)) echo "<TR><TD>$mpar</TD></TR>\n";
+    if (!empty($mpar)) {
+      ++$rows;
+      echo "<TR><TD>$mpar</TD></TR>\n";
+    }
   }
 
   # Ratings and votes
@@ -295,16 +309,13 @@ if (isset ($_GET["mid"])) {
   }
 
   # Seasons
-  $seasons = $movie->seasons();
-  if ( $seasons != 0 ) {
+  if ( $movie->is_serial() || $movie->seasons() ) {
     ++$rows;
     $episodes = $movie->episodes();
     echo '<tr><td valign=top><b>Episodes:</b></td><td>';
-    for ( $season = 1; $season <= $seasons; ++$season ) {
-      $eps = @count($episodes[$season]);
-      for ( $episode = 1; $episode <= $eps; ++$episode ) {
-        $episodedata = &$episodes[$season][$episode];
-        echo '<b>Season '.$season.', Episode '.$episode.': <a href="'.$_SERVER["PHP_SELF"].'?mid='.$episodedata['imdbid'].'">'.$episodedata['title'].'</a></b> (<b>Original Air Date: '.$episodedata['airdate'].'</b>)<br>'.$episodedata['plot'].'<br/><br/>';
+    foreach ( $episodes as $season => $ep ) {
+      foreach ( $ep as $episodedata ) {
+        echo '<b>Season '.$episodedata['season'].', Episode '.$episodedata['episode'].': <a href="'.$_SERVER["PHP_SELF"].'?mid='.$episodedata['imdbid'].'">'.$episodedata['title'].'</a></b> (<b>Original Air Date: '.$episodedata['airdate'].'</b>)<br>'.$episodedata['plot'].'<br/><br/>';
       }
     }
     echo "</td></tr>\n";
@@ -343,7 +354,7 @@ if (isset ($_GET["mid"])) {
     ++$rows;
     echo '<tr><td valign=top><b>Trailers:</b></td><td>';
     for ($i=0;$i<count($trailers);++$i) {
-      echo "<a href='".$trailers[$i]['url']."'>".$trailers[$i]['title']."</a><br>\n";
+      if (!empty($trailers[$i]['url'])) echo "<a href='".$trailers[$i]['url']."'>".$trailers[$i]['title']."</a><br>\n";
     }
     echo "</td></tr>\n";
   }

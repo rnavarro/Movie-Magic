@@ -9,7 +9,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: mdb_config.class.php 405 2010-10-03 18:24:34Z izzy $ */
+ /* $Id: mdb_config.class.php 415 2010-10-10 20:21:44Z izzy $ */
 
 // the proxy to use for connections to imdb (leave it empty for no proxy).
 // this is only supported with PEAR. 
@@ -35,7 +35,7 @@ if ( !defined('PILOT_IMDBFALLBACK') ) define('PILOT_IMDBFALLBACK',FALSE);
  * @class mdb_config
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2002-2004 by Giorgos Giagas and (c) 2004-2008 by Itzchak Rehberg and IzzySoft
- * @version $Revision: 405 $ $Date: 2010-10-03 11:24:34 -0700 (Sun, 03 Oct 2010) $
+ * @version $Revision: 415 $ $Date: 2010-10-10 22:21:44 +0200 (So, 10. Okt 2010) $
  */
 class mdb_config {
   var $imdbsite;
@@ -175,6 +175,7 @@ class mdb_config {
     /** Trigger the HTTP referer
      *  This is required in some places. However, if you think you need to disable
      *  this behaviour, do it here.
+     * @attribute boolean trigger_referer
      */
     $this->trigger_referer = TRUE;
     // let PHP report any script errors (useful for code debugging). Comment out

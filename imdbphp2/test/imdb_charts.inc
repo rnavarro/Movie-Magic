@@ -11,7 +11,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: imdb_charts.inc 364 2010-04-22 18:10:35Z izzy $ */
+ /* $Id: imdb_charts.inc 499 2012-01-18 21:13:17Z izzy $ */
 
 require_once("imdb_charts.class.php");
 require_once(dirname(__FILE__)."/helpers.inc");
@@ -42,7 +42,7 @@ else pass();
 raw("</LI>\n");
 ++$GLOBALS["methods"];
 
-raw(" <LI>method getChartsTop10(): ");
+raw(" <LI>method getChartsBoxOffice(): ");
 $res = $imdb->getChartsBoxOffice();
 if (count($res)<10||empty($res[0][0])) fail("getChartsBoxOffice");
 else pass();

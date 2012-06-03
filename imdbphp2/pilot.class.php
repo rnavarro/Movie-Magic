@@ -8,7 +8,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
- /* $Id: pilot.class.php 395 2010-09-06 18:35:04Z izzy $ */
+ /* $Id: pilot.class.php 481 2011-10-12 10:45:48Z izzy $ */
 
  require_once(dirname(__FILE__)."/movie_base.class.php");
  if (PILOT_IMDBFALLBACK) require_once(dirname(__FILE__)."/imdb.class.php");
@@ -22,7 +22,7 @@
   * @extends movie_base
   * @author Izzy (izzysoft AT qumran DOT org)
   * @copyright (c) 2009 by Itzchak Rehberg and IzzySoft
-  * @version $Revision: 395 $ $Date: 2010-09-06 11:35:04 -0700 (Mon, 06 Sep 2010) $
+  * @version $Revision: 481 $ $Date: 2011-10-12 12:45:48 +0200 (Mi, 12. Okt 2011) $
   */
  class pilot extends movie_base {
 
@@ -36,7 +36,7 @@
     parent::__construct($id);
     if ( empty($this->pilot_apikey) )
       trigger_error('Please provide a valid api key or contact api@moviepilot.de.',E_USER_WARNING);
-    $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision: 395 $');
+    $this->revision = preg_replace('|^.*?(\d+).*$|','$1','$Revision: 481 $');
     if (PILOT_IMDBFALLBACK) $this->imdb = new imdb($id);
     $this->setid($id);
   }
@@ -98,7 +98,7 @@
    switch ($wt){
     case "Title"       : $urlname="/movies/imdb-id-".(int)$this->imdbid().".json"; break;
     case "Credits"     : $urlname="/movies/imdb-id-".(int)$this->imdbid()."/casts.json"; break;
-    case "Trailers"    : $urlname="/movies/imdb-id-".(int)$this->imdbid()."/trailers.json"; break;
+    case "Trailers"    : $urlname="/movies/imdb-id-".(int)$this->imdbid()."/trailer.json"; break;
     case "Images"      : $urlname="/movies/imdb-id-".(int)$this->imdbid()."/images.json"; break;
     default            :
       $this->page[$wt] = "unknown page identifier";
@@ -136,6 +136,19 @@
     return $this->main_year;
   }
 
+  /** Get range of years for e.g. series spanning multiple years
+   *  This is just here for compatibility with the IMDB class - so for now start==end
+   * @method yearspan
+   * @return array yearspan [start,end] (if there was no range, start==end)
+   * @see MoviePilot page / (TitlePage)
+   */
+  function yearspan() {
+    if ( empty($this->main_yearspan) ) {
+      $this->main_yearspan = array('start'=>$this->year(),'end'=>$this->year());
+    }
+    return $this->main_yearspan;
+  }
+
   /** Get movie types (if any specified)
    * @method movieTypes
    * @return array [0..n] of strings (or empty array if no movie types specified)
@@ -146,6 +159,18 @@
   public function movieTypes() {
     if ($this->pilot_imdbfill) $this->main_movietypes = $this->imdb->movieTypes();
     return $this->main_movietypes;
+  }
+
+  /** Get movie type
+   * @method movietype
+   * @return string movietype (TV series, Movie, ...)
+   * @see IMDB page / (TitlePage)
+   * @brief No data available at MoviePilot. If <code>pilot_imdbfill</code> is
+   *        set at least to BASIC_ACCESS, it will be retrieved from IMDB.
+   */
+  public function movietype() {
+    if ($this->pilot_imdbfill) $this->main_movietype = $this->imdb->movieType();
+    return $this->main_movietype;
   }
 
  #---------------------------------------------------------------[ Runtime ]---
@@ -177,6 +202,20 @@
       $this->movieruntimes[] = array("time"=>$runtime,"country"=>$country[0],"comment"=>"");
     }
     return $this->movieruntimes;
+  }
+
+  #----------------------------------------------------------[ Aspect Ratio ]---
+  /** Aspect Ratio of movie screen
+   * @method aspect_ratio
+   * @return string ratio
+   * @see IMDB page / (TitlePage)
+   * @brief If <code>pilot_imdbfill</code> is
+   *        set at least to BASIC_ACCESS, it will be retrieved from IMDB.
+   * @todo Check if this is available from pilot directly
+   */
+  public function aspect_ratio() {
+    if ($this->pilot_imdbfill) $this->aspectratio = $this->imdb->aspect_ratio();
+    return $this->aspectratio;
   }
 
  #----------------------------------------------------------[ Movie Rating ]---
@@ -279,6 +318,18 @@
   public function languages() {
     if ($this->pilot_imdbfill > BASIC_ACCESS) $this->langs = $this->imdb->languages();
     return $this->langs;
+  }
+
+  /** Get all languages this movie is available in, including details
+   * @method languages_detailed
+   * @return array languages (array[0..n] of array[string name, string code, string comment], code being the ISO-Code)
+   * @see IMDB page / (TitlePage)
+   * @brief No data available at MoviePilot. AutoRetrieval from IMDB with
+   *        <code>pilot_imdbfill</code> &gt; BASIC_ACCESS
+   */
+  public function languages_detailed() {
+    if ($this->pilot_imdbfill > BASIC_ACCESS) $this->lang_fulls = $this->imdb->languages_detailed();
+    return $this->langs_full;
   }
 
  #--------------------------------------------------------------[ Genre(s) ]---
@@ -384,12 +435,22 @@
    * @return string plotoutline
    * @see MoviePilot page / (TitlePage)
    */
-  public function plotoutline () {
+  public function plotoutline($fallback=FALSE) {
     if ($this->main_plotoutline == "") {
       if ($this->page["Title"] == "") $this->openpage ("Title");
       $this->main_plotoutline = $this->page["Title"]->{'short_description'};
+      if ( empty($this->main_plotoutline) && $fallback ) $this->main_plotoutline = $this->storyline();
     }
     return $this->main_plotoutline;
+  }
+
+  /** Get the Storyline for the movie
+   * @method storyline
+   * @return string storyline
+   * @see IMDB page / (TitlePage)
+   */
+  public function storyline () {
+    if ($this->pilot_imdbfill==FULL_ACCESS) return $this->imdb->storyline();
   }
 
  #--------------------------------------------------------[ Photo specific ]---
@@ -488,11 +549,12 @@
   public function mainPictures() {
     if ( empty($this->main_pictures) ) {
       if ( $this->page['Images'] == '' ) $this->openpage('Images');
-      if ( $this->page['Images']->total_entries < 1 ) return array(); // no pics available
-      for ($i=0;$i<$this->page['Images']->total_entries;++$i) {
-        $baseurl = $this->page['Images']->images[$i]->base_url.$this->page['Images']->images[$i]->photo_id."/"
-             . $this->page['Images']->images[$i]->file_name_base;
-        $this->main_pictures[] = array('imgsrc'=>$baseurl."_poster.".$this->page['Images']->images[$i]->extension,'bigsrc'=>$baseurl.".".$this->page['Images']->images[$i]->extension,'imglink'=>'');
+      $total_entries = count($this->page['Images']);
+      if ( $total_entries < 1 ) return array(); // no pics available
+      for ($i=0;$i<$total_entries;++$i) {
+        $baseurl = $this->page['Images'][$i]->base_url.$this->page['Images'][$i]->photo_id."/"
+             . $this->page['Images'][$i]->file_name_base;
+        $this->main_pictures[] = array('imgsrc'=>$baseurl."_poster.".$this->page['Images'][$i]->extension,'bigsrc'=>$baseurl.".".$this->page['Images'][$i]->extension,'imglink'=>'');
       }
     }
     return $this->main_pictures;
