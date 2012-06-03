@@ -243,7 +243,7 @@ foreach($tree as $folder) {
 							$screen_size .= 'i';
 						}
 						
-						$screen_size = ' HD '.$screen_size;
+						$screen_size = 'HD '.$screen_size;
 					} else {
 						$screen_size = "";
 					}
@@ -257,17 +257,17 @@ foreach($tree as $folder) {
 				foreach($movie_files as $mfile) {
 					
 					if(strstr($mfile, '720p')) {
-						$screen_size = " HD 720p";
+						$screen_size = "HD 720p";
 					} elseif (strstr($mfile, '1080p')) {
-						$screen_size = " HD 1080p";
+						$screen_size = "HD 1080p";
 					}
 				}
 			}
 	
 			if(strstr($folder['name'], '720p')) {
-				$screen_size = " HD 720p";
+				$screen_size = "HD 720p";
 			} elseif(strstr($folder['name'], '1080p')) {
-				$screen_size = " HD 1080p";
+				$screen_size = "HD 1080p";
 			}
 		}
 
@@ -281,7 +281,7 @@ foreach($tree as $folder) {
 		error_reporting(0); // Ugly hack to get rid of that stupid notice...that comes up when no language is defined...
 		$language = $movie->language();
 		error_reporting(1);
-		
+
 		// Is it a foreign language film?
 		$foreign = FALSE;
 		if($language != 'English') {
@@ -291,7 +291,7 @@ foreach($tree as $folder) {
 		$title = '';
 		// It is foreign, Find an alternate title
 		if($foreign) {
-			echo ' ['.$movie->language().'] ';
+			echo '['.$movie->language().'] ';
 			$aka = $movie->alsoknow();
 			// Do we have a specific USA title?
 			foreach($aka as $name) {
@@ -325,9 +325,9 @@ foreach($tree as $folder) {
 			// Couldn't find anything good....let the user pick
 			if(empty($title)) {
 				if(empty($potentials)) {
-					echo " || Couldn't Pick a title! You choose!\n";
+					echo "|| Couldn't Pick a title! You choose!\n";
 				} else {
-					echo " || Couldn't Pick a title! You choose! Maybe: ";
+					echo "|| Couldn't Pick a title! You choose! Maybe: ";
 					$size = count($potentials);
 					foreach($potentials as $potential) {
 						echo "\"".$potential['title']."\"";
@@ -347,7 +347,7 @@ foreach($tree as $folder) {
 			$title = $movie->title();
 		}
 		
-		echo " ===> ";
+		echo "===> ";
 		$new_name = '';
 		if(stristr($title, '<div class="info-content">')) {
 			$title = substr($title,strlen('<div class="info-content">'));
@@ -357,21 +357,21 @@ foreach($tree as $folder) {
 		$title = str_replace('?','',$title);
 		$title = str_replace('*','_',$title);
 		$title = html_entity_decode($title, ENT_QUOTES, 'UTF-8');
-		$new_name = $title.' ('.$movie->year().')'.$screen_size;
+		$new_name = $title.' ('.$movie->year().') '.$screen_size;
 		
 		echo $new_name;
 		
 		// Rename folders!
 		// Check to see if it's an asian film
 		if($foreign && in_array($language, $asian_languages) && $en_asian) {
-			echo ' [AZN] ';
+			echo '[AZN] ';
 			$new_dest = $dest_dir_asian.'/'.$new_name.'';
 		// It's not so proceed as normal
 		} else {
 			$new_dest = $dest_dir.'/'.$new_name.'';
 		}
 		if(file_exists($new_dest)) {
-			echo " || Folder exists!\n\n";
+			echo "|| Folder exists!\n\n";
 			continue;
 		}
 		$cmd = 'mv '.escapeshellarg($folder['path']).' '.escapeshellarg($new_dest);
@@ -383,7 +383,7 @@ foreach($tree as $folder) {
 		}
 		
 	} else {
-		echo " || No NFO file!";
+		echo "|| No NFO file!";
 	}
 	echo "\n";
 }
