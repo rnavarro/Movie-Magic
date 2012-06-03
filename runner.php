@@ -61,9 +61,9 @@ foreach($tree as $folder) {
 			break;
 		} elseif($file['name'] == 'imdb.txt') {
 			$nfo_path = $file['path'];
-		} elseif ($file['extension'] == 'nfo') {
+		} elseif (strtolower($file['extension']) == 'nfo') {
 			$nfo_path = $file['path'];
-		} elseif (in_array($file['extension'],$movie_extensions)) {
+		} elseif (in_array(strtolower($file['extension']),$movie_extensions)) {
 			$movie_path = $file['path'];
 			$movie_files[] = $file['name'];
 		}
