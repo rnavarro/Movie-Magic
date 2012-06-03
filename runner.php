@@ -2,7 +2,7 @@
 
 /*
  * @Author Robert Navarro <crshman@gmail.com>
- * @Version 1.2
+ * @Version 1.2.1
  * @Date 12/2/09
  * 
  * This little script makes some super crazy movie magic!
@@ -364,7 +364,7 @@ foreach($tree as $folder) {
 		// Rename folders!
 		// Check to see if it's an asian film
 		if($foreign && in_array($language, $asian_languages) && $en_asian) {
-			echo '[AZN] ';
+			echo ' [AZN] ';
 			$new_dest = $dest_dir_asian.'/'.$new_name.'';
 		// It's not so proceed as normal
 		} else {
