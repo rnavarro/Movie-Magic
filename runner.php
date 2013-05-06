@@ -59,7 +59,7 @@ foreach($tree as $folder) {
 		if($file['kind'] == 'directory') {
 			echo " || Looks like we found a directory!";
 			break;
-		} elseif($file['name'] == 'imdb.txt') {
+		} elseif($file['name'] == 'movie.nfo') {
 			$nfo_path = $file['path'];
 		} elseif (strtolower($file['extension']) == 'nfo') {
 			$nfo_path = $file['path'];
