@@ -293,8 +293,8 @@ foreach($tree as $folder) {
 		
 		$title = '';
 		if (!empty($title_path)) {
-			$handle = fopen($nfo_path, "r");
-			$contents = fread($handle, filesize($nfo_path));
+			$handle = fopen($title_path, "r");
+			$contents = fread($handle, filesize($title_path));
 			fclose($handle);
 
 			$splits = explode("\n", $contents);
