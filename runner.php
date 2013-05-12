@@ -54,18 +54,21 @@ foreach($tree as $folder) {
 	//print_r($folder);
 	$nfo_path = '';
 	$movie_path = '';
+	$title_path = '';
 	$movie_files = array();
 	foreach ($folder['content'] as $file) {
 		if($file['kind'] == 'directory') {
 			echo " || Looks like we found a directory!";
 			break;
-		} elseif($file['name'] == 'movie.nfo') {
+		} elseif ($file['name'] == 'movie.nfo') {
 			$nfo_path = $file['path'];
 		} elseif (strtolower($file['extension']) == 'nfo') {
 			$nfo_path = $file['path'];
 		} elseif (in_array(strtolower($file['extension']),$movie_extensions)) {
 			$movie_path = $file['path'];
 			$movie_files[] = $file['name'];
+		} elseif ($file['name'] == 'title.txt') {
+			$title_path = $file['name'];
 		}
 	}
 
@@ -289,62 +292,77 @@ foreach($tree as $folder) {
 		}
 		
 		$title = '';
-		// It is foreign, Find an alternate title
-		if($foreign) {
-			echo '['.$movie->language().'] ';
-			$aka = $movie->alsoknow();
-			// Do we have a specific USA title?
-			foreach($aka as $name) {
-				if($name['country'] == 'USA') {
-					$title = $name['title'];
-				}
-			}
-			
-			$titles = array();
-			// Round up all the international english titles
-			if(empty($title)) {
-				foreach($aka as $name) {
-					if(stristr($name['country'], 'international')) {
-						if(stristr($name['country'], 'english')) {
-							$titles[] = $name;
-						} elseif(stristr($name['comment'], 'english title')) {
-							$titles[] = $name;
-						}
-					// These titles *may* work, but they're not guaranteed to be english like the above
-					} elseif(stristr($name['comment'], 'english title')) {
-						$potentials[] = $name;
-					}
-				}
-				if(!empty($titles[0]['title']) && count($titles) == 1) {
-					$title = $titles[0]['title'];
-				} elseif(count($titles) > 1) {
-					$potentials = $titles;
-				}
-			}
-			
-			// Couldn't find anything good....let the user pick
-			if(empty($title)) {
-				if(empty($potentials)) {
-					echo "|| Couldn't Pick a title! You choose!\n";
-				} else {
-					echo "|| Couldn't Pick a title! You choose! Maybe: ";
-					$size = count($potentials);
-					foreach($potentials as $potential) {
-						echo "\"".$potential['title']."\"";
-						if($size > 1) {
-							echo " or ";
-							$size--;
-						}
-					}
-					echo "\n";
-				}
-				unset($potential);
-				unset($potentials);
+		if (!empty($title_path)) {
+			$handle = fopen($nfo_path, "r");
+			$contents = fread($handle, filesize($nfo_path));
+			fclose($handle);
+
+			$splits = explode("\n", $contents);
+
+			if (isset($splits[0])) {
+				$title = $splits[0];
+			} else {
+				echo "|| title.txt file found but we couldn't parse it!\n";
 				continue;
 			}
-		// Domestic, use the regular title
 		} else {
-			$title = $movie->title();
+			// It is foreign, Find an alternate title
+			if($foreign) {
+				echo '['.$movie->language().'] ';
+				$aka = $movie->alsoknow();
+				// Do we have a specific USA title?
+				foreach($aka as $name) {
+					if($name['country'] == 'USA') {
+						$title = $name['title'];
+					}
+				}
+				
+				$titles = array();
+				// Round up all the international english titles
+				if(empty($title)) {
+					foreach($aka as $name) {
+						if(stristr($name['country'], 'international')) {
+							if(stristr($name['country'], 'english')) {
+								$titles[] = $name;
+							} elseif(stristr($name['comment'], 'english title')) {
+								$titles[] = $name;
+							}
+						// These titles *may* work, but they're not guaranteed to be english like the above
+						} elseif(stristr($name['comment'], 'english title')) {
+							$potentials[] = $name;
+						}
+					}
+					if(!empty($titles[0]['title']) && count($titles) == 1) {
+						$title = $titles[0]['title'];
+					} elseif(count($titles) > 1) {
+						$potentials = $titles;
+					}
+				}
+				
+				// Couldn't find anything good....let the user pick
+				if(empty($title)) {
+					if(empty($potentials)) {
+						echo "|| Couldn't Pick a title! You choose!\n";
+					} else {
+						echo "|| Couldn't Pick a title! You choose! Maybe: ";
+						$size = count($potentials);
+						foreach($potentials as $potential) {
+							echo "\"".$potential['title']."\"";
+							if($size > 1) {
+								echo " or ";
+								$size--;
+							}
+						}
+						echo "\n";
+					}
+					unset($potential);
+					unset($potentials);
+					continue;
+				}
+			// Domestic, use the regular title
+			} else {
+				$title = $movie->title();
+			}
 		}
 		
 		echo "===> ";
