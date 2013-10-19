@@ -37,6 +37,20 @@ if (array_search("sim", $argv)) {
     $simulate = true;
 }
 
+// Get TNMDB config
+$configuration_request_url = "http://api.themoviedb.org/3/configuration";
+$configuration_request_url .= "?api_key={$tmdb_api_key}";
+
+$curlSession = curl_init();
+curl_setopt($curlSession, CURLOPT_URL, $configuration_request_url);
+curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
+curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
+
+$jsonConfigurationData = json_decode(curl_exec($curlSession), true);
+curl_close($curlSession);
+
+$imageBaseUrl = "{$jsonConfigurationData['images']['base_url']}original/";
+
 $tree = scan_directory_recursively($source_dir);
 
 foreach ($tree as $folder) {
@@ -96,38 +110,35 @@ foreach ($tree as $folder) {
         $poster = $poster . "jpg";
         if (!file_exists($poster)) {
             // Get the movie poster
-            $xml_request_url = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/" . $tmdb_api_key;
-            $xml_request_url .= '/tt' . $imdb_id;
-            //echo "\n$xml_request_url\n";
-            try {
-                // enable user error handling
-                libxml_use_internal_errors(true);
-                $xml = new SimpleXMLElement($xml_request_url, null, true);
-            } catch (Exception $e) {
-                echo " || Some XML Error!\n";
+            $request_url = "http://api.themoviedb.org/3/movie";
+            $request_url .= "/tt{$imdb_id}";
+            $request_url .= "?api_key={$tmdb_api_key}";
+            $request_url .= "&append_to_response=images";
+
+            $curlSession = curl_init();
+            curl_setopt($curlSession, CURLOPT_URL, $request_url);
+            curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
+            curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
+
+            $jsonData = json_decode(curl_exec($curlSession), true);
+            curl_close($curlSession);
+
+            // Movie Not found in TMDB
+            if (array_key_exists('status_code', $jsonData)) {
+                echo " || {$jsonData['status_message']}!\n";
                 continue;
             }
 
-            // An exl reported error
-            if (isset($xml->err)) {
-                echo "\nXML Error: $xml->err['msg']\n";
-                continue;
-            } else {
-                // Movie Not found in TMDB
-                if ($xml->movies == 'Nothing found.') {
-                    echo " || Not in TMBD!\n";
-                    continue;
-                }
-                $posters   = array();
-                $backdrops = array();
-                foreach ($xml->movies->movie->images->image as $image) {
-                    if ($image['type'] == 'poster' && $image['size'] == 'original') {
-                        $posters[] = $image;
-                    }
-                    if ($image['type'] == 'backdrop' && $image['size'] == 'original') {
-                        $backdrops[] = $image;
-                    }
-                }
+            $posters   = array();
+            $backdrops = array();
+            foreach ($jsonData['images']['posters'] as $poster) {
+                $posters[] = $poster;
+                break;
+            }
+
+            foreach ($jsonData['images']['backdrops'] as $backdrop) {
+                $backdrops[] = $backdrop;
+                break;
             }
 
             if (empty($posters)) {
@@ -145,8 +156,7 @@ foreach ($tree as $folder) {
             }
 
             $poster_url = array_pop(array_reverse($posters));
-            $poster_url = get_object_vars($poster_url);
-            $poster_url = $poster_url['@attributes']['url'];
+            $poster_url = $imageBaseUrl . $poster_url['file_path'];
 
             $return = get_headers($poster_url, 1);
             if (stristr($return[0], '404')) {
@@ -155,11 +165,9 @@ foreach ($tree as $folder) {
             }
 
             $poster_url = escapeshellarg($poster_url);
-            //echo "\n$poster_url\n";
 
             $backdrop_url = array_pop(array_reverse($backdrops));
-            $backdrop_url = get_object_vars($backdrop_url);
-            $backdrop_url = $backdrop_url['@attributes']['url'];
+            $backdrop_url = $imageBaseUrl . $backdrop_url['file_path'];
 
             $return = get_headers($backdrop_url, 1);
             if (stristr($return[0], '404')) {
@@ -168,7 +176,6 @@ foreach ($tree as $folder) {
             }
 
             $backdrop_url = escapeshellarg($backdrop_url);
-            //echo "\n$backdrop_url\n";
 
             // Save the movie poster
             $poster  = substr($movie_path, 0, -3);
