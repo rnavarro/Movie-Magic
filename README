@@ -16,6 +16,7 @@ Requirements
 ============
 	* TMDB Account with API Key (http://www.themoviedb.org/account/signup)
 	* IMDB2 Class [Already Included] (http://sourceforge.net/projects/imdbphp/)
+	* PHP Curl module
 	* OS/Server Independent
 
 Recommended
