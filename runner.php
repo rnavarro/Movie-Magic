@@ -74,14 +74,14 @@ foreach ($tree as $folder) {
         if ($file['kind'] == 'directory') {
             echo " || Looks like we found a directory!";
             break;
-        } elseif ($file['name'] == 'movie.nfo') {
+        } elseif ($file['name'] == 'movie.nfo' && empty($nfo_path)) {
             $nfo_path = $file['path'];
-        } elseif (strtolower($file['extension']) == 'nfo') {
+        } elseif (strtolower($file['extension']) == 'nfo' && empty($nfo_path)) {
             $nfo_path = $file['path'];
         } elseif (in_array(strtolower($file['extension']), $movie_extensions)) {
             $movie_path    = $file['path'];
             $movie_files[] = $file['name'];
-        } elseif ($file['name'] == 'title.txt') {
+        } elseif ($file['name'] == 'title.txt' && !empty($title_path)) {
             $title_path = $file['path'];
         }
     }
@@ -105,29 +105,30 @@ foreach ($tree as $folder) {
         }
         echo ' {' . $imdb_id . '}';
 
+        // Get the movie poster
+        $request_url = "http://api.themoviedb.org/3/movie";
+        $request_url .= "/tt{$imdb_id}";
+        $request_url .= "?api_key={$tmdb_api_key}";
+        $request_url .= "&append_to_response=images";
+
+        $curlSession = curl_init();
+        curl_setopt($curlSession, CURLOPT_URL, $request_url);
+        curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
+        curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
+
+        $jsonData = json_decode(curl_exec($curlSession), true);
+        curl_close($curlSession);
+
+        // Movie Not found in TMDB
+        if (array_key_exists('status_code', $jsonData)) {
+            echo " || {$jsonData['status_message']}!\n";
+            continue;
+        }
+
         // See if we already have a poster
         $poster = substr($movie_path, 0, -3);
         $poster = $poster . "jpg";
         if (!file_exists($poster)) {
-            // Get the movie poster
-            $request_url = "http://api.themoviedb.org/3/movie";
-            $request_url .= "/tt{$imdb_id}";
-            $request_url .= "?api_key={$tmdb_api_key}";
-            $request_url .= "&append_to_response=images";
-
-            $curlSession = curl_init();
-            curl_setopt($curlSession, CURLOPT_URL, $request_url);
-            curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
-            curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
-
-            $jsonData = json_decode(curl_exec($curlSession), true);
-            curl_close($curlSession);
-
-            // Movie Not found in TMDB
-            if (array_key_exists('status_code', $jsonData)) {
-                echo " || {$jsonData['status_message']}!\n";
-                continue;
-            }
 
             $posters   = array();
             $backdrops = array();
@@ -343,6 +344,13 @@ foreach ($tree as $folder) {
                         $title = $titles[0]['title'];
                     } elseif (count($titles) > 1) {
                         $potentials = $titles;
+                    }
+                }
+
+                // Last try....grab the title from TMDB
+                if (empty($title)) {
+                    if (!empty($jsonData['title'])) {
+                        $title = $jsonData['title'];
                     }
                 }
 
